@@ -17,6 +17,6 @@ public class Customer extends Person {
      * @return the dialogue of the customer
      */
     public String speak(Employee e) {
-        return null;
+        return getName() + " says: 'Hello, " + e.getName() + "! Can you help me with something?'";
     }
 }

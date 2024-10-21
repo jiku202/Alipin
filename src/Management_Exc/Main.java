@@ -16,7 +16,20 @@ public class Main {
      * @throws NoSuchElementException when given manager or employee does not exist in the list of persons
      */
     public static void giveRaise(List<Person> persons, String manager, String employee, double salary)  {
+        Person mgr = findPerson(persons, manager);
+        Person emp = findPerson(persons, employee);
 
+        if (!(mgr instanceof Manager)) {
+            throw new ClassCastException(manager + " is not a Manager.");
+        }
+        if (!(emp instanceof Employee)) {
+            throw new ClassCastException(employee + " is not an Employee.");
+        }
+        if (salary <= 0) {
+            throw new IllegalArgumentException("Salary increase must be positive.");
+        }
+
+        ((Manager) mgr).giveRaise((Employee) emp, salary);
     }
 
     /**
@@ -29,7 +42,17 @@ public class Main {
      * @throws IllegalStateException when developer already has a manager
      */
     public static void assignPM(List<Person> persons, String developer, String manager) {
+        Person dev = findPerson(persons, developer);
+        Person mgr = findPerson(persons, manager);
 
+        if (!(dev instanceof Developer)) {
+            throw new ClassCastException(developer + " is not a Developer.");
+        }
+        if (!(mgr instanceof Manager)) {
+            throw new ClassCastException(manager + " is not a Manager.");
+        }
+
+        ((Developer) dev).setProjectManager((Manager) mgr);
     }
 
     /**
@@ -38,10 +61,27 @@ public class Main {
      * @param customer the customer to speak to the employee
      * @param employee the employee to be spoken to
      * @return the dialogue of the customer to the employee
-     * @throws IllegalArgumentException when given customer or employee is not what they are
+     * @throws ClassCastException when given customer or employee is not what they are
      * @throws NoSuchElementException when given customer or employee is not in the list of persons
      */
     public static String customerSpeak(List<Person> persons, String customer, String employee) {
-        return null;
+        Person cust = findPerson(persons, customer);
+        Person emp = findPerson(persons, employee);
+
+        if (!(cust instanceof Customer)) {
+            throw new ClassCastException(customer + " is not a Customer.");
+        }
+        if (!(emp instanceof Employee)) {
+            throw new ClassCastException(employee + " is not an Employee.");
+        }
+
+        return ((Customer) cust).speak((Employee) emp);
+    }
+    private static Person findPerson(List<Person> persons, String name) {
+        return persons.stream()
+                .filter(p -> p.getName().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(name + " not found in the list."));
     }
 }
+

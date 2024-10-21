@@ -11,7 +11,11 @@ public abstract class Person {
      * @throws IllegalArgumentException when age is negative
      */
     public Person(String name, int age) {
+        if (age < 0) {
+            throw new IllegalArgumentException("Age cannot be negative.");
+        }
         this.name = name;
+        this.age = age;
     }
 
     @Override
